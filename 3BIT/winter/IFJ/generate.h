@@ -28,10 +28,28 @@ typedef struct IF_stack{
   int top;
 }*PIF_stack;
 
+typedef struct CYCLE_present{
+  char *start_now;
+  char *end_now;
+  tInstr instr;
+  int temp;
+}*PCYCLE_present;
+
+typedef struct CYCLE_stack{
+  PCYCLE_present *data;
+  int top;
+}*PCYCLE_stack;
+
+
 PIF_stack IF_init();
 void push_IF(PIF_stack stack,char *else_now, char *end_now);
 void pop_IF(PIF_stack stack);
-void IF_add(PIF_stack,char *else_now,char *end_now,char *present_func,tInstr instr);
+void IF_add(PIF_stack,char *else_now,char *end_now,char *present_func,tInstr instr,char *temp);
+
+PCYCLE_stack CYCLE_init();
+void push_CYCLE(PCYCLE_stack stack,char *start_now,char *end_now,int tmp,tInstr instr);
+void pop_CYCLE(PCYCLE_stack stack);
+void CYCLE_add(PCYCLE_stack stack,char *start_now, char *end_now,char *present_func,tInstr instr,int tmp,char *temp);
 
 int generate(tListOfInstr list,Pmain_table table);
 void arithmetic2(int type,char *param);

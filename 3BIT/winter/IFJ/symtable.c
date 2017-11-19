@@ -284,6 +284,8 @@ void func_define(Pmain_table table, char *fname){
 int is_defined(Pmain_table table, char *fname){
   if(fname == NULL || table == NULL){errors(INTERNAL);}
   Pmain_nod func = search_func(table->Root, fname);
+  if(func == NULL)
+    return false;
   if(func->defined == true)
     return true;
   return false;

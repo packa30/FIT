@@ -9,10 +9,11 @@
 #include "generate.h"
 void jednoduche_volaniefunkcie_zakl_operatory_rovnaky_typ();
 void factorial_instrukcie();
-
+void jednoduchy_while();
 int main(){
-  factorial_instrukcie();
+  //factorial_instrukcie();
   //jednoduche_volaniefunkcie_zakl_operatory_rovnaky_typ();
+  jednoduchy_while();
   return 0;
 }
 void jednoduche_volaniefunkcie_zakl_operatory_rovnaky_typ(){
@@ -71,6 +72,7 @@ void factorial_instrukcie(){
   if(instr_add(list,I_DEFVAR,"temp_result",NULL,NULL,0,0) == false){printf("what the fuck\n");}
   if(instr_add(list,I_DEFVAR,"decremented_n",NULL,NULL,0,0) == false){printf("what the fuck\n");}
   if(instr_add(list,I_DEFVAR,"result",NULL,NULL,0,0) == false){printf("what the fuck\n");}
+
   if(instr_add(list,I_IF,NULL,NULL,NULL,0,0) == false){printf("what the fuck\n");}
   if(instr_add(list,I_LT,NULL,"n","2",TYPE_INT,TYPE_INT) == false){printf("what the fuck\n");}
   if(instr_add(list,I_MOVE,"result","1",NULL,TYPE_INT,0) == false){printf("what the fuck\n");}
@@ -86,23 +88,67 @@ void factorial_instrukcie(){
   if(instr_add(list,I_RETURN,"result",NULL,NULL,0,0) == false){printf("what the fuck\n");}
   if(instr_add(list,I_ENDFUNC,NULL,NULL,NULL,0,0) == false){printf("what the fuck\n");}
   if(instr_add(list,I_MAIN,"scope",NULL,NULL,0,0) == false){printf("what the fuck\n");}
+
   if(instr_add(list,I_DEFVAR,"a",NULL,NULL,0,0) == false){printf("what the fuck\n");}
   if(instr_add(list,I_DEFVAR,"vysl",NULL,NULL,0,0) == false){printf("what the fuck\n");}
-  if(instr_add(list,I_WRITE,"Zadajte cislo pro vypocet faktorialu",NULL,NULL,TYPE_STRING,0) == false){printf("what the fuck\n");}
-  if(instr_add(list,I_INPUT,"a",NULL,NULL,0,0) == false){printf("what the fuck\n");}
+  if(instr_add(list,I_WRITE,"Zadajte cislo pro vypocet faktorialu\n",NULL,NULL,TYPE_STRING,0) == false){printf("what the fuck\n");}
+
+  if(instr_add(list,I_INPUT,"a",NULL,NULL,TYPE_INT,0) == false){printf("what the fuck\n");}
+  //if(instr_add(list,I_MOVE,"a","4",NULL,TYPE_INT,0) == false){printf("what the fuck\n");}
+
   if(instr_add(list,I_IF,NULL,NULL,NULL,0,0) == false){printf("what the fuck\n");}
-  if(instr_add(list,I_LT,NULL,"a","0",TYPE_INT,TYPE_INT) == false){printf("what the fuck\n");}
+  if(instr_add(list,I_GT,NULL,"0","a",TYPE_INT,TYPE_INT) == false){printf("what the fuck\n");}
   if(instr_add(list,I_WRITE,"\nFacto\\rial ne#lze spocitat\n",NULL,NULL,TYPE_STRING,0) == false){printf("what the fuck\n");}
   if(instr_add(list,I_ELSE,NULL,NULL,NULL,0,0) == false){printf("what the fuck\n");}
+  if(instr_add(list,I_IF,NULL,NULL,NULL,0,0) == false){printf("what the fuck\n");}
+  if(instr_add(list,I_EQ,NULL,"a","10",TYPE_INT,TYPE_INT) == false){printf("what the fuck\n");}
+  if(instr_add(list,I_WRITE,"Pepo ty si najsamlepsi na svete\n",NULL,NULL,TYPE_STRING,0) == false){printf("what the fuck\n");}
+  if(instr_add(list,I_ELSE,NULL,NULL,NULL,0,0) == false){printf("what the fuck\n");}
+  if(instr_add(list,I_WRITE,"Skus znova\n",NULL,NULL,TYPE_STRING,0) == false){printf("what the fuck\n");}
+  if(instr_add(list,I_IFEND,NULL,NULL,NULL,0,0) == false){printf("what the fuck\n");}
   if(instr_add(list,I_CALL,"factorial",NULL,NULL,0,0) == false){printf("what the fuck\n");}
   if(instr_add(list,I_DEFVAR,"n",NULL,NULL,0,0) == false){printf("what the fuck\n");}
   if(instr_add(list,I_MOVE,"n","a",NULL,0,0) == false){printf("what the fuck\n");}
   if(instr_add(list,I_CALLEND,NULL,NULL,NULL,0,0) == false){printf("what the fuck\n");}
   if(instr_add(list,I_MOVE_RETVAL,"vysl",NULL,NULL,0,0) == false){printf("what the fuck\n");}
-  if(instr_add(list,I_WRITE,"\nVysledej_je:",NULL,NULL,TYPE_STRING,0) == false){printf("what the fuck\n");}
+  if(instr_add(list,I_WRITE,"Vysledek je:",NULL,NULL,TYPE_STRING,0) == false){printf("what the fuck\n");}
   if(instr_add(list,I_WRITE,"vysl",NULL,NULL,TYPE_INT,0) == false){printf("what the fuck\n");}
   if(instr_add(list,I_WRITE,"\n",NULL,NULL,TYPE_STRING,0) == false){printf("what the fuck\n");}
   if(instr_add(list,I_IFEND,NULL,NULL,NULL,0,0) == false){printf("what the fuck\n");}
+
+  generate(list,table);
+  listFree(list);
+  free(list);
+  destroy(table);
+}
+void jednoduchy_while(){
+  tList list2 = Listinit();
+  Insert(list2, TYPE_INT, "n");
+  Pmain_table table = Table_create();
+  if(insert_token(table, TYPE_INT, NULL, NULL, "scope", NULL) != true){errors(INTERNAL);}
+  if(insert_token(table, TYPE_INT, "a", NULL, "scope", NULL) != true){errors(INTERNAL);}
+  if(insert_token(table, TYPE_INT, "vysl", NULL, "scope", NULL) != true){errors(INTERNAL);}
+
+  tListOfInstr list = listInit();
+  if(instr_add(list,I_MAIN,"scope",NULL,NULL,0,0) == false){printf("what the fuck\n");}
+
+  if(instr_add(list,I_DEFVAR,"a",NULL,NULL,0,0) == false){printf("what the fuck\n");}
+  if(instr_add(list,I_DEFVAR,"vysl",NULL,NULL,0,0) == false){printf("what the fuck\n");}
+  if(instr_add(list,I_MOVE,"vysl","0",NULL,TYPE_INT,0) == false){printf("what the fuck\n");}
+  if(instr_add(list,I_WRITE,"zadajte velkost kokota\n",NULL,NULL,TYPE_STRING,0) == false){printf("what the fuck\n");}
+  if(instr_add(list,I_INPUT,"a",NULL,NULL,TYPE_INT,0) == false){printf("what the fuck\n");}
+  //if(instr_add(list,I_MOVE,"a","4",NULL,TYPE_INT,0) == false){printf("what the fuck\n");}
+
+  if(instr_add(list,I_WRITE,"\tO|\t\t\t|O\n",NULL,NULL,TYPE_STRING,0) == false){printf("what the fuck\n");}
+  if(instr_add(list,I_CYCLE,NULL,NULL,NULL,0,0) == false){printf("what the fuck\n");}
+  if(instr_add(list,I_LT,NULL,"vysl","a",TYPE_INT,TYPE_INT) == false){printf("what the fuck\n");}
+  if(instr_add(list,I_WRITE,"\t |\t\t\t|\n",NULL,NULL,TYPE_STRING,0) == false){printf("what the fuck\n");}
+  if(instr_add(list,I_ADD,"vysl","vysl","1",TYPE_INT,TYPE_INT) == false){printf("what the fuck\n");}
+  if(instr_add(list,I_CYCLEEND,NULL,NULL,NULL,0,0) == false){printf("what the fuck\n");}
+  if(instr_add(list,I_WRITE,"\t -------------------------\n",NULL,NULL,TYPE_STRING,0) == false){printf("what the fuck\n");}
+  if(instr_add(list,I_WRITE,"\t !           |           !\n",NULL,NULL,TYPE_STRING,0) == false){printf("what the fuck\n");}
+  if(instr_add(list,I_WRITE,"\t !           |           !\n",NULL,NULL,TYPE_STRING,0) == false){printf("what the fuck\n");}
+  if(instr_add(list,I_WRITE,"\t ------------|------------\n",NULL,NULL,TYPE_STRING,0) == false){printf("what the fuck\n");}
 
   generate(list,table);
   listFree(list);
