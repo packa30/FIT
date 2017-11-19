@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project fitkitversion="1.0" outputprefix="pexeso">
+
+    <name>LightsOut</name>
+    <author>Peter Grofcik</author>
+    <description></description>
+    <!--  MCU part --> 
+    <mcu>
+        <file>main.c</file>
+    </mcu>
+
+    <!-- FPGA part -->
+    <fpga architecture="pc">
+        <include>fpga/ctrls/spi/package.xml</include>
+        <include>fpga/ctrls/vga/package.xml</include>
+        <include>fpga/ctrls/lcd/package.xml</include>
+        <include>fpga/ctrls/keyboard/package.xml</include>
+
+        <file>LightsOut.vhd</file>
+        <file>maska_pack.vhd</file>
+        <file>bcd.vhd</file>
+        <file>cell.vhd</file>
+    </fpga>
+</project>
