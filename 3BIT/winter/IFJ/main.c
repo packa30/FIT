@@ -12,6 +12,7 @@ void factorial_instrukcie();
 
 int main(){
   factorial_instrukcie();
+  //jednoduche_volaniefunkcie_zakl_operatory_rovnaky_typ();
   return 0;
 }
 void jednoduche_volaniefunkcie_zakl_operatory_rovnaky_typ(){
@@ -37,8 +38,6 @@ void jednoduche_volaniefunkcie_zakl_operatory_rovnaky_typ(){
 
 
 
-
-
   tList list2 = Listinit();
   Insert(list2, TYPE_INT, "k");
   Pmain_table table = Table_create();
@@ -51,7 +50,9 @@ void jednoduche_volaniefunkcie_zakl_operatory_rovnaky_typ(){
   if(insert_token(table, TYPE_INT, "c", NULL, "scope", NULL) != true){errors(INTERNAL);}
 
   generate(list,table);
-
+  listFree(list);
+  free(list);
+  destroy(table);
 }
 void factorial_instrukcie(){
   tList list2 = Listinit();
@@ -91,7 +92,7 @@ void factorial_instrukcie(){
   if(instr_add(list,I_INPUT,"a",NULL,NULL,0,0) == false){printf("what the fuck\n");}
   if(instr_add(list,I_IF,NULL,NULL,NULL,0,0) == false){printf("what the fuck\n");}
   if(instr_add(list,I_LT,NULL,"a","0",TYPE_INT,TYPE_INT) == false){printf("what the fuck\n");}
-  if(instr_add(list,I_WRITE,"\nFactorial nelze spocitat\n",NULL,NULL,TYPE_STRING,0) == false){printf("what the fuck\n");}
+  if(instr_add(list,I_WRITE,"\nFacto\\rial ne#lze spocitat\n",NULL,NULL,TYPE_STRING,0) == false){printf("what the fuck\n");}
   if(instr_add(list,I_ELSE,NULL,NULL,NULL,0,0) == false){printf("what the fuck\n");}
   if(instr_add(list,I_CALL,"factorial",NULL,NULL,0,0) == false){printf("what the fuck\n");}
   if(instr_add(list,I_DEFVAR,"n",NULL,NULL,0,0) == false){printf("what the fuck\n");}
@@ -104,4 +105,7 @@ void factorial_instrukcie(){
   if(instr_add(list,I_IFEND,NULL,NULL,NULL,0,0) == false){printf("what the fuck\n");}
 
   generate(list,table);
+  listFree(list);
+  free(list);
+  destroy(table);
 }

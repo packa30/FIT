@@ -1,3 +1,4 @@
+
 /*  @Project: IFJ17
     @author: xgrofc00@stud.fit.vutbr.cz
     @author: xkrajc17@stud.fit.vutbr.cz
@@ -275,7 +276,18 @@ int insert_token(Pmain_table table, int type, char *name, char *value, char *fna
     return false;
   }
 }
-
+void func_define(Pmain_table table, char *fname){
+    if(fname == NULL || table == NULL){errors(INTERNAL);}
+    Pmain_nod func = search_func(table->Root, fname);
+    func->defined=true;
+}
+int is_defined(Pmain_table table, char *fname){
+  if(fname == NULL || table == NULL){errors(INTERNAL);}
+  Pmain_nod func = search_func(table->Root, fname);
+  if(func->defined == true)
+    return true;
+  return false;
+}
 Pmain_table Table_create(){
   Pmain_table table = (Pmain_table)malloc(sizeof(main_table));
   if(table == NULL ){errors(INTERNAL);}

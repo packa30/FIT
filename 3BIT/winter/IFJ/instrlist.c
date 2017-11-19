@@ -29,9 +29,9 @@ tListOfInstr listInit()
   return L;
 }
 int instr_add(tListOfInstr List,int type,char *add1,char *add2, char *add3,int type2,int type3){
-  char *addr1;
-  char *addr2;
-  char *addr3;
+  char *addr1=NULL;
+  char *addr2=NULL;
+  char *addr3=NULL;
   if(add1 != NULL){
     addr1 = malloc(strlen(add1)+1);
     strcpy(addr1,add1);
@@ -59,6 +59,13 @@ void listFree(tListOfInstr L)
       ptr = L->first;
       L->first = L->first->nextItem;
       // uvolnime celou polozku
+      if(ptr->Instruction->addr1 != NULL)
+        free(ptr->Instruction->addr1);
+      if(ptr->Instruction->addr2 != NULL)
+        free(ptr->Instruction->addr2);
+      if(ptr->Instruction->addr3 != NULL)
+        free(ptr->Instruction->addr3);
+      free(ptr->Instruction);
       free(ptr);
     }
   }

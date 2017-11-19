@@ -75,6 +75,7 @@ typedef struct main_table main_table, *Pmain_table;
 struct main_nod{
 	char name[256];
 	int type;
+	int defined;
 	tList list;
 	PSymtab func_tree;
 	Pmain_nod LPtr;
@@ -93,6 +94,9 @@ Pmain_nod search_func(Pmain_nod root, char *name);
 int search_PATO(Pmain_table table, char *name, char *fname);
 int compare_whole_list(Pmain_table table, char *fname, tList list);
 int printf_tree(Pmain_nod nod);
+
+void func_define(Pmain_table table, char *fname);
+int is_defined(Pmain_table table, char *fname);
 
 tList Listinit();
 void Insert(tList L, int type, char *name);

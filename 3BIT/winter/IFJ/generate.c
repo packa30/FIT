@@ -136,9 +136,14 @@ int generate(tListOfInstr list,Pmain_table table){
     item=item->nextItem;
   }
 
+  free(stack->data);
+  free(stack);
+  free(else_now);
+  free(end_now);
   return true;
 }
 void arithmetic2(int type,char *param){
+  char *changed_string;
     switch (type) {
       case TYPE_INT:
         printf("int@%s",param);
@@ -147,7 +152,55 @@ void arithmetic2(int type,char *param){
         printf("float@%s",param);
         break;
       case TYPE_STRING:
-        printf("string@%s",param);
+        changed_string = malloc(1);
+        int p=0;
+        for(unsigned int i=0;i <=strlen(param+1);i++){
+          if(param[i] == ' '){
+            changed_string=realloc(changed_string, strlen(changed_string)+4);
+              changed_string[p]='\\';
+              changed_string[p+1]='0';
+              changed_string[p+2]='3';
+              changed_string[p+3]='2';
+              p+=3;
+          }
+          else if(param[i] == '\\'){
+            changed_string=realloc(changed_string,strlen(changed_string)+1);
+            changed_string[p]=param[i];
+          }
+          else if(param[i] == '\n'){
+            changed_string=realloc(changed_string, strlen(changed_string)+4);
+            changed_string[p]='\\';
+            changed_string[p+1]='0';
+            changed_string[p+2]='1';
+            changed_string[p+3]='0';
+            p+=3;
+          }
+          else if(param[i] == '\t'){
+            changed_string=realloc(changed_string, strlen(changed_string)+4);
+            changed_string[p]='\\';
+            changed_string[p+1]='0';
+            changed_string[p+2]='1';
+            changed_string[p+3]='0';
+            p+=3;
+          }
+          else if(param[i] == '#'){
+            changed_string=realloc(changed_string, strlen(changed_string)+4);
+            changed_string[p]='\\';
+            changed_string[p+1]='0';
+            changed_string[p+2]='3';
+            changed_string[p+3]='5';
+            p+=3;
+          }
+          else{
+            changed_string=realloc(changed_string,strlen(changed_string)+1);
+            changed_string[p]=param[i];
+          }
+
+          p++;
+        }
+        //printf("%s\n",changed_string);
+        printf("string@%s",changed_string);
+        free(changed_string);
         break;
     }
 }
@@ -171,10 +224,7 @@ void add_params(Pmain_table table,char *scope,char *param,int type,char *present
       arithmetic2(type,param);
     }
     else{
-      if(type == TYPE_STRING){
-          
-      }
-      printf("%s@%s",scope,param);
+        printf("%s@%s",scope,param);
     }
   }
   else{
