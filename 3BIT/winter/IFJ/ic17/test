@@ -1,0 +1,32 @@
+.IFJcode17
+JUMP $$main
+LABEL $$main
+DEFVAR GF@&tmp0
+DEFVAR GF@&tmp1
+DEFVAR GF@&vysl
+DEFVAR GF@&temp1
+DEFVAR GF@&a
+DEFVAR GF@a
+DEFVAR GF@pri
+MOVE GF@pri string@
+DEFVAR GF@vysl2
+MOVE GF@vysl2 int@80
+INT2FLOAT GF@&vysl GF@vysl2
+WRITE GF@&vysl
+WRITE string@\010
+WRITE string@zadajte\032velkost\032kokota\010
+READ GF@a int
+WRITE GF@a
+WRITE string@\010
+ADD GF@&temp1 GF@a int@10
+GT GF@&tmp0 GF@&temp1 int@80
+JUMPIFEQ $scope$LTEQ$end$0 GF@&tmp0 bool@true
+LABEL $scope$LTEQ$start$0
+WRITE string@Pepo\032ty\032si\032najsamlepsi\032na\032svete\032\035\032pojebali\032ti\032semena\032aj\032zanoreny\032if\032v\0322\032zanorenych\032while\032funguje\010
+CONCAT GF@pri GF@pri string@jebalose\032
+ADD GF@a GF@a int@10
+ADD GF@&temp1 GF@a int@10
+GT GF@&tmp0 GF@&temp1 int@80
+JUMPIFEQ $scope$LTEQ$start$0 GF@&tmp0 bool@false
+LABEL $scope$LTEQ$end$0
+WRITE GF@a

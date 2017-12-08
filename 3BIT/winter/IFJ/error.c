@@ -1,6 +1,10 @@
 #include "error.h"
+#include "parser.h"
+
 void errors(int err) {
 //printf("    Chyba:%s\n", s->str);
+  //destroy_all(table->Root);
+
   switch (err) {
     case 1:
     //  fprintf(stderr, "Lexival error\n");

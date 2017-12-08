@@ -1,4 +1,7 @@
-//jednoducha knihovna pro praci s nekonecne dlouhymi retezci
+//jednoducha knihovna pro praci s nekonecne dlouhymi retezciň
+/*
+
+*/
 #include <string.h>
 #include <malloc.h>
 #include "str.h"
@@ -11,9 +14,6 @@
 #define STR_ERROR   1
 #define STR_SUCCESS 0
 
-int string_concat(string *s, string *s2){
-  
-}
 int strInit(string *s)
 // funkce vytvori novy retezec
 {

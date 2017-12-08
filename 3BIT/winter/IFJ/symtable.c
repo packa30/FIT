@@ -13,42 +13,56 @@ void destroy(Pmain_table table){
     destroy_all(table->Root);
   free(table);
 }
-void destroy_list(tList_item item){
-  if(item->next != NULL)
-    destroy_list(item->next);
 
+void destroy_list(tList_item item){
+  if(item == NULL)
+    return;
+  if(item->next != NULL){
+    destroy_list(item->next);
+  }
   destroy_symbols(item->item);
   free(item);
-
 }
 void destroy_all(Pmain_nod root){
-  if(root->LPtr != NULL)
-    destroy_all(root->LPtr);
-  if(root->RPtr != NULL)
-    destroy_all(root->RPtr);
-  if(root->func_tree != NULL)
-    STdestroy(root->func_tree);
-  if(root->list != NULL){
-    destroy_list(root->list->first);
-    free(root->list);
+  if(root != NULL){
+    if(root->LPtr != NULL){
+      destroy_all(root->LPtr);
+    }
+    if(root->RPtr != NULL){
+      destroy_all(root->RPtr);
+    }
+    if(root->func_tree != NULL){
+      STdestroy(root->func_tree);
+    }
+    if(root->list != NULL){
+      destroy_list(root->list->first);
+      free(root->list);
+    }
+    free(root);
   }
-  free(root);
 
 }
 int compare_list_type(Pmain_table table, char *fname, tList list){
   Pmain_nod func = search_func(table->Root, fname);
+  //print_list(func->list);
+  //print_list(list);
+
   if(func == NULL)
     return false;
   if(func->list == NULL && list == NULL)
     return true;
   if(func->list == NULL || list == NULL)
     return false;
-  if(func->list->first == NULL && list->first == NULL)
-    return true;
+
   if(func->list->first == NULL || list->first == NULL)
     return false;
+  if(func->list->first == NULL && list->first == NULL)
+    return true;
   return compare_2_lists(func->list->first,list->first);
 }
+
+
+
 int compare_2_lists(tList_item L_item, tList_item L2_item)
 {
   tList_item item = L_item;
@@ -62,6 +76,61 @@ int compare_2_lists(tList_item L_item, tList_item L2_item)
   if (item != NULL || item2 != NULL){return false;}
   return true;
 
+}
+int compare_whole_list_call(Pmain_table table, char *fname, tList list){
+  Pmain_nod func = search_func(table->Root, fname);
+  if(func == NULL)
+    return false;
+  if(func->list == NULL && list == NULL)
+    return true;
+  if(func->list == NULL || list == NULL)
+    return false;
+  if(func->list->first == NULL && list->first == NULL)
+    return true;
+  if(func->list->first == NULL || list->first == NULL)
+    return false;
+  return compare_2_lists_whole_call(func->list->first,list->first);
+}
+
+int compare_2_lists_whole_call(tList_item L_item, tList_item L2_item)
+{
+  tList_item item = L_item;
+  tList_item item2 = L2_item;
+  while(item != NULL && item2 !=NULL){
+      if(item->item->type == TYPE_INT || item->item->type == 2001){
+        if(item2->item->type == TYPE_DOUBLE || item2->item->type == TYPE_INT){
+          ;
+        }else if(item2->item->type == 1998 || item2->item->type == 2001){
+          ;
+        } else{
+          return false;
+        }
+      }
+      else if(item->item->type == TYPE_DOUBLE || item->item->type == 1998){
+        if(item2->item->type == TYPE_DOUBLE || item2->item->type == TYPE_INT){
+          ;
+        }else if(item2->item->type == 1998 || item2->item->type == 2001){
+          ;
+        } else{
+          return false;
+        }
+      }
+      else if(item->item->type == TYPE_STRING || item->item->type == 1998){
+        if(item2->item->type != TYPE_STRING && item2->item->type != 1998){
+          return false;
+        }
+      }
+      else{
+        //printf("%i %i \n",item->item->type, item2->item->type );
+        return false;
+      }
+    item = item->next;
+    item2 = item2->next;
+  }// END WHILE
+  if (item != NULL || item2 != NULL){
+    return false;
+  }
+  return true;
 }
 int compare_whole_list(Pmain_table table, char *fname, tList list){
   Pmain_nod func = search_func(table->Root, fname);
@@ -109,12 +178,15 @@ void Insert(tList L, int type, char *name){
   new_sym->type = type;
   strcpy(new_sym->name, name);
 	newItem->item = new_sym;
+  newItem->next = NULL;
 
-	if(L->first != NULL){
-		L->last->next = newItem;
-		L->last = newItem;
-	}else
-		L->first = L->last = newItem;
+  if(L->first == NULL){
+    L->first = newItem;
+    L->last = L->first;
+  }else{
+    L->last->next = newItem;
+    L->last = L->last->next;
+  }
 }
 
 void print_list(tList L){
@@ -129,10 +201,23 @@ int printf_tree(Pmain_nod nod){
   printf("%s\n", nod->name );
   if(nod->list != NULL)
     print_list(nod->list);
+  if(nod->func_tree != NULL)
+    printf_tree_params(nod->func_tree->Root);
   if(nod->LPtr != NULL)
     printf_tree(nod->LPtr);
   if(nod->RPtr != NULL)
     printf_tree(nod->RPtr);
+  return 1;
+}
+
+int printf_tree_params(PSymbol sym){
+  if(sym == NULL)
+    return false;
+  printf("%s\n", sym->name);
+  if(sym->LPtr != NULL)
+    printf_tree_params(sym->LPtr);
+  if(sym->RPtr != NULL)
+    printf_tree_params(sym->RPtr);
   return 1;
 }
 int search_PATO(Pmain_table table, char *name, char *fname){
@@ -141,17 +226,50 @@ int search_PATO(Pmain_table table, char *name, char *fname){
   if( func == NULL)
     return false;
   //printf("%s\n%s\n",func->name,fname );
-  if(func->func_tree != NULL){
-    PSymbol prem = STsearch(func->func_tree->Root, name);
-    if( prem == NULL ){
-      //printf("pojebali ti semena\n");
+  if(name == NULL){
+    return true;
+  }
+  else{
+    if(func->func_tree != NULL){
+      PSymbol prem = STsearch(func->func_tree->Root, name);
+      if( prem == NULL ){
+        //printf("pojebali ti semena\n");
+        return false;
+      }
+    }
+    else{
       return false;
     }
   }
-  else if(name != NULL){return false;}
   //printf("Symbol name: %s, type: %d, value: %s, funkcia (vrchny nod ): %s\n", prem->name, prem->type, prem->value, func->name);
   return true;
 }
+
+int typeFromList(Pmain_table table,char*name,char*fname){
+  Pmain_nod func = search_func(table->Root, fname);
+  if (func == NULL){return false;}
+  else{
+    if(func->list != NULL){
+    tList_item item = func->list->first;
+      while(item != NULL){
+        if(strcmp(name,item->item->name) == 0){return item->item->type;}
+        item=item->next;
+      }
+    }
+  }
+  return false;
+}
+PSymbol varfromlist(Pmain_nod func, char *name){
+  if(func->list != NULL){
+    tList_item item = func->list->first;
+    while(item != NULL){
+      if(strcmp(name,item->item->name) == 0){return item->item;}
+      item=item->next;
+    }
+  }
+  return 0;
+}
+
 int search_PEPO(Pmain_table table,char *name,char *fname){
   Pmain_nod func = search_func(table->Root, fname);
   if (func == NULL){return false;}
@@ -174,9 +292,15 @@ int search_func_type(Pmain_table table, char *fname){
 int search_prem_type(Pmain_table table, char* name,char *fname){
   Pmain_nod func = search_func(table->Root, fname);
   if (func == NULL){return false;}
-  PSymbol prem = STsearch(func->func_tree->Root, name);
-  if( prem == NULL ){return false;}
-  return prem->type;
+  else{
+    PSymbol prem = STsearch(func->func_tree->Root, name);
+    if( prem == NULL ){return false;}
+    else{
+      return prem->type;
+    }
+  }
+  return false;
+
 
 }
 Pmain_nod search_func(Pmain_nod root, char *name){
@@ -284,8 +408,9 @@ void func_define(Pmain_table table, char *fname){
 int is_defined(Pmain_table table, char *fname){
   if(fname == NULL || table == NULL){errors(INTERNAL);}
   Pmain_nod func = search_func(table->Root, fname);
-  if(func == NULL)
+  if(func == NULL){
     return false;
+  }
   if(func->defined == true)
     return true;
   return false;
@@ -422,4 +547,56 @@ void STdestroy(PSymtab table){
   if (table==NULL) return;
   destroy_symbols(table->Root);
   free(table);
+}
+
+int insert_generate_token(Pmain_table table, char *name, char *fname){
+  if(fname == NULL || table == NULL){errors(INTERNAL);}
+  if (name!=NULL ){
+      Pmain_nod func = search_func(table->Root, fname);
+      if(func == NULL){return false;}
+      if(func->func_tree == NULL){
+        PSymtab table = STcreate();
+        if(STinsert(table, 0, name, NULL) != 1){errors(INTERNAL);}
+        func->func_tree=table;
+      }
+      else{
+        if(STinsert(func->func_tree, 0, name, NULL) != 1){errors(INTERNAL);}
+      }
+
+      /*if(insert_generate_token_recursive(&(table->Root), name, fname) != false)
+        return true;
+      return false;*/
+  }
+  return true;
+}
+int insert_generate_token_recursive(Pmain_nod *parent,char *name, char *fname){
+  if(*parent == NULL){
+    return false;
+  }
+  else{
+    //printf("%s          %s\n",(*parent)->name, fname );
+    if (strcmp((*parent)->name, fname) < 0){
+      return insert_generate_token_recursive(&((*parent)->LPtr), name, fname);
+    }
+    else { // do praveho
+      if(strcmp((*parent)->name, fname) > 0){
+          return insert_generate_token_recursive(&((*parent)->RPtr), name, fname);
+      }
+      else {
+            if((*parent)->func_tree == NULL){
+              PSymtab table = STcreate();
+              if(STinsert(table, 0, name, NULL) != 1){errors(INTERNAL);}
+              (*parent)->func_tree=table;
+            }
+            else{
+              if(STinsert((*parent)->func_tree, 0, name, NULL) != 1){errors(INTERNAL);}
+            }
+            return true;
+      }
+
+    }
+
+  }
+
+
 }

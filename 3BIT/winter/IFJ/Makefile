@@ -1,8 +1,12 @@
-CXX=gcc
-CXXFLAGS= -Wall -pedantic -Wextra
+CC=gcc
+src=$(wildcard *.c)
+obj=$(src:.cpp=.o)
+CFLAGS=-Wall -Wextra -pedantic -g
 
-all: error.c symtable.c instrlist.c generate.c main.c
-	$(CXX) -o generate $(CXXFLAGS) $^
-
+ifj: $(obj)
+	$(CC) $(CFLAGS) -o $@ $^
+test:
+	chmod +x test.sh
+	./test.sh
 clean:
-	rm -f generate
+	rm  ifj

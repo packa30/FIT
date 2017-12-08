@@ -6,7 +6,7 @@
 */
 #include "instrlist.h"
 
-
+#define true 1
 
 tInstr instrFill(int type, void *addr1, void *addr2, void *addr3,int type2,int type3){
   tInstr instr = malloc(sizeof(struct Instr));
@@ -33,15 +33,15 @@ int instr_add(tListOfInstr List,int type,char *add1,char *add2, char *add3,int t
   char *addr2=NULL;
   char *addr3=NULL;
   if(add1 != NULL){
-    addr1 = malloc(strlen(add1)+1);
+    addr1 = (char *)malloc(strlen(add1)+1);
     strcpy(addr1,add1);
   }
   if(add2 != NULL){
-    addr2 = malloc(strlen(add2)+1);
+    addr2 = (char *)malloc(strlen(add2)+1);
     strcpy(addr2,add2);
   }
   if(add3 != NULL){
-    addr3 = malloc(strlen(add3)+1);
+    addr3 = (char *)malloc(strlen(add3)+1);
     strcpy(addr3,add3);
   }
   tInstr instr = instrFill(type, (void *)addr1, (void *)addr2, (void *)addr3,type2,type3);
@@ -59,15 +59,21 @@ void listFree(tListOfInstr L)
       ptr = L->first;
       L->first = L->first->nextItem;
       // uvolnime celou polozku
-      if(ptr->Instruction->addr1 != NULL)
-        free(ptr->Instruction->addr1);
-      if(ptr->Instruction->addr2 != NULL)
-        free(ptr->Instruction->addr2);
-      if(ptr->Instruction->addr3 != NULL)
-        free(ptr->Instruction->addr3);
-      free(ptr->Instruction);
-      free(ptr);
+      if (ptr->Instruction!=NULL){
+        if(ptr->Instruction->addr1 != NULL){
+          free(ptr->Instruction->addr1);
+        }
+        if(ptr->Instruction->addr2 != NULL)
+          free(ptr->Instruction->addr2);
+        if(ptr->Instruction->addr3 != NULL)
+          free(ptr->Instruction->addr3);
+
+        free(ptr->Instruction);
+      }
+      if (ptr!=NULL)
+        free(ptr);
     }
+    free(L);
   }
 }
 

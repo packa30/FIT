@@ -1,0 +1,21 @@
+.IFJcode17
+JUMP $$main
+LABEL $$main
+DEFVAR GF@a
+DEFVAR GF@vysl
+MOVE GF@vysl int@0
+WRITE string@zadajte\032velkost\032kokota\010
+READ GF@a int
+WRITE string@\009O|\009\009\009|O\0101
+DEFVAR GF@&tmpcycle0
+LT GF@&tmpcycle0 GF@vysl GF@a
+JUMPIFNEQ $scope$vysl$LT$a$end GF@&tmpcycle0 bool@true
+LABEL $scope$vysl$LT$a$start
+WRITE string@\009\032|\009\009\009|\010
+ADD GF@vysl GF@vysl int@1
+LT GF@&tmpcycle0 GF@vysl GF@a
+JUMPIFNEQ $scope$vysl$LT$a$start GF@&tmpcycle0 bool@false
+WRITE string@\009\032-------------------------\010
+WRITE string@\009\032!\032\032\032\032\032\032\032\032\032\032\032|\032\032\032\032\032\032\032\032\032\032\032!\010
+WRITE string@\009\032!\032\032\032\032\032\032\032\032\032\032\032|\032\032\032\032\032\032\032\032\032\032\032!\010
+WRITE string@\009\032------------|------------\010
